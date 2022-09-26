@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript">
+      //model
+      let handlelisteListe = [];
+      let todoList = [];
+      let content = "";
+      let selectedItem;
+      let activeTab = 'toDo';
+      let getTab = "document.getElementsByClassName('active')[0]"
+      let appPage = "";
+      let avtalerState = ''
+      let handlelisteState = ''
+      let toDoState = 'active'
+      
+      viewSelect()
+    
+      function view() {
+      let todoIsActive = activeTab == "toDo" ? "active": ""; 
+      let HandlelisteIsActive = activeTab == "Handleliste" ? "active": ""; 
+      let html = /*HTML*/ `
+        <div class='container'>
+          <div style="margin-bottom:-9px;" class=tabContainer>
+            <ul class="tabs clearfix" >
+              <li onclick='swapTabs("Handleliste")' class="${HandlelisteIsActive}"> 
+                <a href=# >Handleliste</a> 
+              </li>
+              <li onclick='swapTabs("toDo")' class='${todoIsActive}'> 
+                <a href=# >ToDo</a> 
+              </li>
+            </ul>
+          </div>
+        <div class=outer-circle></div>
+        `;
+      return html;
+    }
+
+      // function viewSelect(){
+      //     if (activeTab == 'toDo'){
+      //      viewToDo()
+      //     } if (activeTab == 'Handleliste'){
+      //       viewHandleliste()
+      //   }
+      //   view()
+      // }
+
+      function viewSelect(){
+        let html = view();
+          if (activeTab == 'toDo') html += viewToDo()
+          if (activeTab == 'Handleliste')html += viewHandleliste()
+        
+          html += "</div>"
+          document.getElementById("app").innerHTML = html
+      }
+
+      function viewToDo(){
+        let html = /*HTML*/ `
+        <div class="todo">
+            <input autofocus placeholder='Hva må jeg gjøre i dag?' class='input' type='text' onchange='addItem(this.value)'>
+            <div class="liste">
+              ${showList()}
+            </div>
+        </div>
+        `
+       return html;
+      }
+
+      function viewHandleliste(){
+        let html = /*HTML*/ `
+        <div class="todo">
+            <input autofocus placeholder='Hva må jeg handle i dag?' class='input' type='text' onchange='addHandleItem(this.value)'>
+            <div class="liste">
+            ${showHandleList()}
+            </div>
+        </div>
+        `;
+        return html;
+      }
+
+      //controller
+      function swapTabs(pagename){
+        activeTab = pagename;
+        viewSelect();
+      }
+
+      function addItem(inputValue) {
+        let objToPush = {
+          isDone: false,
+          todoTxt:inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+        }
+        todoList.push(objToPush);
+        viewSelect();
+      }
+
+      function addHandleItem(inputValue) {
+        let objToPush = {
+          isDone: false,
+          handleTxt:inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
+        }
+        handlelisteListe.push(objToPush);
+        viewSelect();
+      }
+
+  
+      function showList() {
+       let html = "";
+        for (let i = 0; i < todoList.length; i++) {
+          html += /*HTML*/`<span id="${i}" style="text-decoration:${todoList[i].isDone ? 'line-through underline tomato' : ''}" onclick='selectLi(${i}, todoList)'>${todoList[i].todoTxt}</span>`;
+        }
+        return html;
+      }
+
+      function showHandleList() {
+       let html = "";
+        for (let i = 0; i < handlelisteListe.length; i++) {
+          html += /*HTML*/`<span id="${i}" style="text-decoration:${handlelisteListe[i].isDone ? 'line-through underline tomato' : ''}" onclick='selectLi(${i}, "handlelisteListe")'>${handlelisteListe[i].handleTxt}</span>`;
+        }
+        return html;
+      }
+
+
+      function selectLi(i){
+        if (activeTab == 'toDo'){
+          todoList[i].isDone = !todoList[i].isDone;
+        if (selectedItem == i){
+            removeLi(i)
+            selectedItem = null
+        }else{
+            selectedItem = i
+        }
+        } if (activeTab == 'Handleliste'){
+          handlelisteListe[i].isDone = !handlelisteListe[i].isDone;
+          if (selectedItem == i){
+              removeLi(i)
+              selectedItem = null
+          }else{
+              selectedItem = i
+          }
+        }
+        //flipswitch 
+        
+        showList();
+        viewSelect()
+        // view();
+      }
+
+      // function tabClick(el){
+      //   document.getElementsByClassName('active')[0].classList.remove('active')
+      //   el.classList.add('active')
+      //   activeTab = el.children[0].innerHTML
+      //   console.log(activeTab)
+      //   viewSelect()
+      // }
+
+      function removeLi(i){
+        if (activeTab == 'toDo'){
+        todoList.splice(i, 1)
+        selectedItem = null;
+        } if (activeTab == 'Handleliste'){
+          handlelisteListe.splice(i, 1)
+          selectedItem = null;
+        }
+        showList();
+        viewSelect()
+      }
+    </script>
+  </body>
+</html>
