@@ -16,7 +16,6 @@
       let content = "";
       let selectedItem;
       let activeTab = 'toDo';
-      let getTab = "document.getElementsByClassName('active')[0]"
       let appPage = "";
       let avtalerState = ''
       let handlelisteState = ''
@@ -43,15 +42,6 @@
         `;
       return html;
     }
-
-      // function viewSelect(){
-      //     if (activeTab == 'toDo'){
-      //      viewToDo()
-      //     } if (activeTab == 'Handleliste'){
-      //       viewHandleliste()
-      //   }
-      //   view()
-      // }
 
       function viewSelect(){
         let html = view();
@@ -110,7 +100,6 @@
         viewSelect();
       }
 
-  
       function showList() {
        let html = "";
         for (let i = 0; i < todoList.length; i++) {
@@ -126,7 +115,6 @@
         }
         return html;
       }
-
 
       function selectLi(i){
         if (activeTab == 'toDo'){
@@ -146,20 +134,9 @@
               selectedItem = i
           }
         }
-        //flipswitch 
-        
         showList();
         viewSelect()
-        // view();
       }
-
-      // function tabClick(el){
-      //   document.getElementsByClassName('active')[0].classList.remove('active')
-      //   el.classList.add('active')
-      //   activeTab = el.children[0].innerHTML
-      //   console.log(activeTab)
-      //   viewSelect()
-      // }
 
       function removeLi(i){
         if (activeTab == 'toDo'){
